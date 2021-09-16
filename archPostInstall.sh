@@ -6,7 +6,7 @@ phase1=(
 
 phase2=(
   "xorg" "xorg-xinit" "gdm" "qtile" "pacman-contrib" "nerd-fonts-ubuntu-mono" 
-  "tealdeer" "man" "exa" "ripgrep" "fd" "starship" "neofetch" "google-chrome-stable"
+  "tealdeer" "man" "exa" "ripgrep" "fd" "starship" "neofetch" "google-chrome"
 )
 
 # Run as root
@@ -19,6 +19,7 @@ fi
 tmpdir="$(command mktemp -d)"
 command cd "${tmpdir}"
 echo ${tmpdir}
+chmod 777 "${tmpdir}"
 
 # Permission changes to make Paru work
 mkdir /.cache
@@ -71,9 +72,11 @@ if ! builtin type -p 'yay' >/dev/null 2>&1; then
 fi
 END
 
-git clone https://aur.archlinux.org/paru.git
+#mkdir "${tmpdir}/paru"
+#chmod 777 "{$tmpdir}/paru"
+sudo -u $uservar git clone https://aur.archlinux.org/paru.git
 cd paru
-sudo -u nobody makepkg -si --noconfirm
+sudo -u $uservar makepkg -si --noconfirm
 
 # Install Phase2
 sudo -u nobody paru -S --noconfirm ${phase2[@]}
@@ -85,8 +88,8 @@ cp -r dotfiles/.config/ /home/$uservar/
 chown -R $uservar /home/$uservar/.config/
 chgrp -R $uservar /home/$uservar/.config/
 
-rm -rf "${tmpdir}"
+#rm -rf "${tmpdir}"
 
 #End stuff
-systemctl enable gdm
-systemctl start gdm
+#systemctl enable gdm
+#systemctl start gdm
