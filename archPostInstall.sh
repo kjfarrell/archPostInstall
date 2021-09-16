@@ -6,7 +6,7 @@ phase1=(
 
 phase2=(
   "xorg" "xorg-xinit" "gdm" "qtile" "pacman-contrib" "nerd-fonts-ubuntu-mono" 
-  "tealdeer" "man" "exa" "ripgrep" "fd" "starship" "neofetch"
+  "tealdeer" "man" "exa" "ripgrep" "fd" "starship" "neofetch" "google-chrome-stable"
 )
 
 # Run as root
@@ -20,7 +20,7 @@ tmpdir="$(command mktemp -d)"
 command cd "${tmpdir}"
 echo ${tmpdir}
 
-# Permission changes to make Yay work
+# Permission changes to make Paru work
 mkdir /.cache
 chmod 777 /.cache
 
@@ -28,9 +28,7 @@ chmod 777 /.cache
 read -p "Enter Username: " uservar
 read -sp "Enter password: " passvar
 
-# Block comment
-: <<'END'
-END
+
 
 useradd -m -G "wheel" -s /bin/fish $uservar
 echo "$uservar:$passvar" | chpasswd
@@ -57,6 +55,8 @@ rm -f /etc/sudoers.new
 
 # Add nobody to wheel, stops passwords for makepkg
 usermod -a -G wheel nobody 
+# Block comment
+: <<'END'
 
 # Install Yay and dependancies
 if ! builtin type -p 'yay' >/dev/null 2>&1; then
@@ -69,9 +69,14 @@ if ! builtin type -p 'yay' >/dev/null 2>&1; then
     command cd yay_*_x86_64 || return 1
     sudo -u nobody ./yay -Sy yay-bin --noconfirm
 fi
+END
+
+git clone https://aur.archlinux.org/paru.git
+cd paru
+sudo -u nobody makepkg -si --noconfirm
 
 # Install Phase2
-sudo -u nobody yay -S --noconfirm ${phase2[@]}
+sudo -u nobody paru -S --noconfirm ${phase2[@]}
 
 # Dotfiles
 #mkdir /home/$uservar/.config
