@@ -30,6 +30,7 @@ read -sp "Enter password: " passvar
 
 # Block comment
 : <<'END'
+END
 
 useradd -m -G "wheel" -s /bin/fish $uservar
 echo "$uservar:$passvar" | chpasswd
@@ -80,8 +81,6 @@ sudo -u nobody yay -S --noconfirm ${phase2[@]}
 
 # Set some aliases
 
-
-END
 # Dotfiles
 mkdir /home/$uservar/.config
 git clone https://github.com/antoniosarosi/dotfiles.git
