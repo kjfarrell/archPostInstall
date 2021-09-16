@@ -7,6 +7,7 @@ phase1=(
 phase2=(
   "xorg" "xorg-xinit" "gdm" "qtile" "pacman-contrib" "nerd-fonts-ubuntu-mono" 
   "tealdeer" "man" "exa" "ripgrep" "fd" "starship" "neofetch" "google-chrome"
+  "code"
 )
 
 # Run as root
