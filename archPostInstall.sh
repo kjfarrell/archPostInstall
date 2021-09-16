@@ -30,7 +30,6 @@ read -sp "Enter password: " passvar
 
 # Block comment
 : <<'END'
-END
 
 useradd -m -G "wheel" -s /bin/fish $uservar
 echo "$uservar:$passvar" | chpasswd
@@ -82,16 +81,18 @@ sudo -u nobody yay -S --noconfirm ${phase2[@]}
 # Set some aliases
 
 
+END
 # Dotfiles
+mkdir /home/$uservar/.config
 git clone https://github.com/antoniosarosi/dotfiles.git
-cp -r dotfiles/.config/qtile /home/$uservar/.config/qtile
-chown -R $uservar /home/$uservar/.config/qtile
-chgrp -R $uservar /home/$uservar/.config/qtile
+cp -r dotfiles/.config/qtile /home/$uservar/.config/
+chown -R $uservar /home/$uservar/.config/
+chgrp -R $uservar /home/$uservar/.config/
 
 rm -rf "${tmpdir}"
 
 #End stuff
-systemctl enable gdm
-systemctl start gdm
+#systemctl enable gdm
+#systemctl start gdm
 
 
