@@ -20,6 +20,10 @@ tmpdir="$(command mktemp -d)"
 command cd "${tmpdir}"
 echo ${tmpdir}
 
+# Permission changes to make Yay work
+mkdir /.cache
+chmod 777 /.cache
+
 # Create user
 read -p "Enter Username: " uservar
 read -sp "Enter password: " passvar
@@ -67,9 +71,7 @@ if ! builtin type -p 'yay' >/dev/null 2>&1; then
     sudo -u nobody ./yay -Sy yay-bin --noconfirm
 fi
 
-# Permission changes to make Yay work
-mkdir /.cache
-chmod 777 /.cache
+
 
 # Install Phase2
 sudo -u nobody yay -S --noconfirm ${phase2[@]}
@@ -82,7 +84,7 @@ sudo -u nobody yay -S --noconfirm ${phase2[@]}
 
 # Dotfiles
 git clone https://github.com/antoniosarosi/dotfiles.git
-cp -fr dotfiles/.config/qtile /home/$uservar/.config/qtile
+cp -r dotfiles/.config/qtile /home/$uservar/.config/qtile
 chown -R $uservar /home/$uservar/.config/qtile
 chgrp -R $uservar /home/$uservar/.config/qtile
 
