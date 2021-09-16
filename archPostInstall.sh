@@ -13,7 +13,7 @@ phase2=(
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
-fi
+fi 
 
 # Create temp file and cd into it.
 tmpdir="$(command mktemp -d)"
@@ -31,8 +31,12 @@ END
 useradd -m -G "wheel" -s /bin/fish $uservar
 echo "$uservar:$passvar" | chpasswd
 
+# Edit pacman.conf colours and threads
+sed 's/#Color/Color/' </etc/pacman.conf >/etc/pacman.conf.new
+sed 's/#ParallelDownloads/ParallelDownloads/' </etc/pacman.conf.new >/etc/pacman.conf
+
 # Update System
-pacman -Syu 
+pacman -Syu --noconfirm
 
 # Install Phase1
 pacman -S --noconfirm --needed ${phase1[@]} 
@@ -41,10 +45,6 @@ pip install psutil
 # Start sshd
 systemctl enable sshd
 systemctl start sshd
-
-# Edit pacman.conf colours and threads
-sed 's/#Color/Color/' </etc/pacman.conf >/etc/pacman.conf.new
-sed 's/#ParallelDownloads/ParallelDownloads/' </etc/pacman.conf.new >/etc/pacman.conf
 
 # Install sudo, enable wheel access
 sed 's/# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' </etc/sudoers >/etc/sudoers.new
