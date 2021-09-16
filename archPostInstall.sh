@@ -70,17 +70,13 @@ if ! builtin type -p 'yay' >/dev/null 2>&1; then
     sudo -u nobody ./yay -Sy yay-bin --noconfirm
 fi
 
-
-
 # Install Phase2
 sudo -u nobody yay -S --noconfirm ${phase2[@]}
 
-# Set some aliases
-
 # Dotfiles
-mkdir /home/$uservar/.config
-git clone https://github.com/antoniosarosi/dotfiles.git
-cp -r dotfiles/.config/qtile /home/$uservar/.config/
+#mkdir /home/$uservar/.config
+git clone https://github.com/kjfarrell/dotfiles.git
+cp -r dotfiles/.config/ /home/$uservar/
 chown -R $uservar /home/$uservar/.config/
 chgrp -R $uservar /home/$uservar/.config/
 
@@ -89,5 +85,3 @@ rm -rf "${tmpdir}"
 #End stuff
 systemctl enable gdm
 systemctl start gdm
-
-
