@@ -52,7 +52,6 @@ systemctl start sshd
 
 # Install sudo, enable wheel access
 sed 's/# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' </etc/sudoers >/etc/sudoers.new
-
 mv -f /etc/sudoers.new /etc/sudoers
 rm -f /etc/sudoers.new
 
@@ -76,9 +75,6 @@ fi
 # Install Phase2
 sudo -u nobody yay -S --noconfirm ${phase2[@]}
 
-#End stuff
-
-
 # Set some aliases
 
 # Dotfiles
@@ -91,7 +87,7 @@ chgrp -R $uservar /home/$uservar/.config/
 rm -rf "${tmpdir}"
 
 #End stuff
-#systemctl enable gdm
-#systemctl start gdm
+systemctl enable gdm
+systemctl start gdm
 
 
