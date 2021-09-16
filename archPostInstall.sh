@@ -88,8 +88,8 @@ cp -r dotfiles/.config/ /home/$uservar/
 chown -R $uservar /home/$uservar/.config/
 chgrp -R $uservar /home/$uservar/.config/
 
-#rm -rf "${tmpdir}"
+rm -rf "${tmpdir}"
 
 #End stuff
-#systemctl enable gdm
-#systemctl start gdm
+systemctl enable gdm
+systemctl start gdm
