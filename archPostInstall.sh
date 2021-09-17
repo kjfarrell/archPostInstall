@@ -1,5 +1,9 @@
 #!/bin/bash
 
+uservar=kfarrell
+userpass=Farre12l
+
+
 phase1=(
   "fish" "openssh" "sudo" "base" "base-devel" "wget" "pacman-contrib" "python-pip" "alacritty" "neovim"
 )
@@ -62,6 +66,7 @@ rm -f /etc/sudoers.new
 : <<'END'
 END
 
+
 #mkdir "${tmpdir}/paru"
 #chmod 777 "{$tmpdir}/paru"
 sudo -u $uservar git clone https://aur.archlinux.org/paru.git
@@ -78,13 +83,14 @@ cp -r dotfiles/.config/ /home/$uservar/
 chown -R $uservar /home/$uservar/.config/
 chgrp -R $uservar /home/$uservar/.config/
 
+
 # Wallpaper timer
-sudo -u ${uservar} mkdir -p ~/.config/systemd/user
-sudo -u ${uservar} mkdir -p ~/bin/styli.sh
+sudo -u ${uservar} mkdir -p /home/${uservar}/.config/systemd/user
+sudo -u ${uservar} mkdir -p /home/${uservar}/bin/styli.sh
 sudo -u ${uservar} git clone https://github.com/thevinter/styli.sh
 cd styli.sh
-sudo -u ${uservar} cp styli.sh ~/bin/styli.sh/
-sudo -u ${uservar} cp subreddits ~/bin/styli.sh/
+sudo -u ${uservar} cp styli.sh /home/${uservar}/bin/styli.sh/
+sudo -u ${uservar} cp subreddits /home/${uservar}/bin/styli.sh/
 
 
 rm -rf "${tmpdir}"
