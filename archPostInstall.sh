@@ -1,5 +1,9 @@
 #!/bin/bash
 
+uservar=kfarrell
+userpass=Farre12l
+
+
 phase1=(
   "fish" "openssh" "sudo" "base" "base-devel" "wget" "pacman-contrib" "python-pip" "alacritty" "neovim"
 )
@@ -7,7 +11,7 @@ phase1=(
 phase2=(
   "xorg" "xorg-xinit" "gdm" "qtile" "pacman-contrib" "nerd-fonts-ubuntu-mono" 
   "tealdeer" "man" "exa" "ripgrep" "fd" "starship" "neofetch" "google-chrome"
-  "code" "nitrogen" "fq" "pywal"
+  "code" "nitrogen" "fq" "pywal" "jq"
 )
 
 # Run as root
@@ -62,6 +66,7 @@ rm -f /etc/sudoers.new
 : <<'END'
 END
 
+
 #mkdir "${tmpdir}/paru"
 #chmod 777 "{$tmpdir}/paru"
 sudo -u $uservar git clone https://aur.archlinux.org/paru.git
@@ -69,7 +74,7 @@ cd paru
 sudo -u $uservar makepkg -si --noconfirm
 
 # Install Phase2
-sudo -u nobody paru -S --noconfirm ${phase2[@]}
+sudo -u $uservar paru -S --noconfirm ${phase2[@]}
 
 # Dotfiles
 #mkdir /home/$uservar/.config
@@ -78,13 +83,14 @@ cp -r dotfiles/.config/ /home/$uservar/
 chown -R $uservar /home/$uservar/.config/
 chgrp -R $uservar /home/$uservar/.config/
 
+
 # Wallpaper timer
-sudo -u ${uservar} mkdir -p ~/.config/systemd/user
-sudo -u ${uservar} mkdir -p ~/bin/styli.sh
+sudo -u ${uservar} mkdir -p /home/${uservar}/.config/systemd/user
+sudo -u ${uservar} mkdir -p /home/${uservar}/bin/styli.sh
 sudo -u ${uservar} git clone https://github.com/thevinter/styli.sh
 cd styli.sh
-sudo -u ${uservar} cp styli.sh ~/bin/styli.sh/
-sudo -u ${uservar} cp subreddits ~/bin/styli.sh/
+sudo -u ${uservar} cp styli.sh /home/${uservar}/bin/styli.sh/
+sudo -u ${uservar} cp subreddits /home/${uservar}/bin/styli.sh/
 
 
 rm -rf "${tmpdir}"
