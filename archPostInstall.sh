@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 
 #: <<'END'
 #END
@@ -10,7 +10,7 @@ phase1=(
 phase2=(
   "xorg" "xorg-xinit" "gdm" "qtile" "pacman-contrib" "nerd-fonts-ubuntu-mono" 
   "tealdeer" "man" "exa" "ripgrep" "fd" "starship" "neofetch" "google-chrome"
-  "code" "nitrogen" "jq" "pywal"
+  "code" "nitrogen" "jq" "pywal" "bat"
 )
 
 # Run as root
@@ -22,8 +22,8 @@ fi
 # Create temp file and cd into it.
 tmpdir="$(command mktemp -d)"
 command cd "${tmpdir}"
-#echo ${tmpdir}
-#chmod 777 "${tmpdir}"
+echo ${tmpdir}
+chmod 777 "${tmpdir}"
 
 # Permission changes to make Paru work
 mkdir /.cache
