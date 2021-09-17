@@ -7,7 +7,7 @@ phase1=(
 phase2=(
   "xorg" "xorg-xinit" "gdm" "qtile" "pacman-contrib" "nerd-fonts-ubuntu-mono" 
   "tealdeer" "man" "exa" "ripgrep" "fd" "starship" "neofetch" "google-chrome"
-  "code" "nitrogen" "fq" "pywal"
+  "code" "nitrogen" "jq" "pywal"
 )
 
 # Run as root
@@ -26,14 +26,13 @@ chmod 777 "${tmpdir}"
 mkdir /.cache
 chmod 777 /.cache
 
-: <<'END'
-END
 
 # Create user
 read -p "Enter Username: " uservar
 read -sp "Enter password: " passvar
 
 
+#: <<'END'
 
 useradd -m -G "wheel" -s /bin/fish $uservar
 echo "$uservar:$passvar" | chpasswd
@@ -74,22 +73,23 @@ sudo -u $uservar makepkg -si --noconfirm
 # Install Phase2
 sudo -u nobody paru -S --noconfirm ${phase2[@]}
 
+#END
 # Dotfiles
 #mkdir /home/$uservar/.config
+sudo -u ${uservar} mkdir -p /home/${uservar}/bin/styli.sh
 git clone https://github.com/kjfarrell/dotfiles.git
-cp -f dotfiles/.config/ /home/$uservar/
+cp -fr dotfiles/.config/ /home/$uservar/
 cp -fr dotfiles/bin /home/$uservar/
-chown -R $uservar /home/$uservar/.config/
-chgrp -R $uservar /home/$uservar/.config/
+chown -R $uservar /home/$uservar/.config/ /home/$uservar/bin
+chgrp -R $uservar /home/$uservar/.config/ /home/$uservar/bin
 
 
 # Wallpaper timer
 sudo -u ${uservar} mkdir -p /home/${uservar}/.config/systemd/user
-sudo -u ${uservar} mkdir -p /home/${uservar}/bin/styli.sh
 sudo -u ${uservar} git clone https://github.com/thevinter/styli.sh
 cd styli.sh
-sudo -u ${uservar} cp styli.sh /home/${uservar}/bin/styli.sh/
-sudo -u ${uservar} cp subreddits /home/${uservar}/bin/styli.sh/
+sudo -u ${uservar} cp styli.sh /home/${uservar}/bin/styli.sh
+sudo -u ${uservar} cp subreddits /home/${uservar}/bin/styli.sh
 
 
 rm -rf "${tmpdir}"
