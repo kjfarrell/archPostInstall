@@ -7,7 +7,7 @@ phase1=(
 phase2=(
   "xorg" "xorg-xinit" "gdm" "qtile" "pacman-contrib" "nerd-fonts-ubuntu-mono" 
   "tealdeer" "man" "exa" "ripgrep" "fd" "starship" "neofetch" "google-chrome"
-  "code"
+  "code" "nitrogen" "fq" "pywal"
 )
 
 # Run as root
@@ -56,21 +56,10 @@ mv -f /etc/sudoers.new /etc/sudoers
 rm -f /etc/sudoers.new
 
 # Add nobody to wheel, stops passwords for makepkg
-usermod -a -G wheel nobody 
+# usermod -a -G wheel nobody 
+
 # Block comment
 : <<'END'
-
-# Install Yay and dependancies
-if ! builtin type -p 'yay' >/dev/null 2>&1; then
-    echo 'Install yay.'
-    dl_url="$(
-        curl -sfLS 'https://api.github.com/repos/Jguer/yay/releases/latest' | grep 'browser_download_url' | tail -1 | cut -d '"' -f 4
-    )"
-    command wget "${dl_url}"
-    command tar xzvf yay_*_x86_64.tar.gz
-    command cd yay_*_x86_64 || return 1
-    sudo -u nobody ./yay -Sy yay-bin --noconfirm
-fi
 END
 
 #mkdir "${tmpdir}/paru"
@@ -88,6 +77,15 @@ git clone https://github.com/kjfarrell/dotfiles.git
 cp -r dotfiles/.config/ /home/$uservar/
 chown -R $uservar /home/$uservar/.config/
 chgrp -R $uservar /home/$uservar/.config/
+
+# Wallpaper timer
+sudo -u ${uservar} mkdir -p ~/.config/systemd/user
+sudo -u ${uservar} mkdir -p ~/bin/styli.sh
+sudo -u ${uservar} git clone https://github.com/thevinter/styli.sh
+cd styli.sh
+sudo -u ${uservar} cp styli.sh ~/bin/styli.sh/
+sudo -u ${uservar} cp subreddits ~/bin/styli.sh/
+
 
 rm -rf "${tmpdir}"
 
