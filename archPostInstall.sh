@@ -1,9 +1,5 @@
 #!/bin/bash
 
-uservar=kfarrell
-userpass=Farre12l
-
-
 phase1=(
   "fish" "openssh" "sudo" "base" "base-devel" "wget" "pacman-contrib" "python-pip" "alacritty" "neovim"
 )
@@ -30,6 +26,9 @@ chmod 777 "${tmpdir}"
 mkdir /.cache
 chmod 777 /.cache
 
+: <<'END'
+END
+
 # Create user
 read -p "Enter Username: " uservar
 read -sp "Enter password: " passvar
@@ -38,6 +37,7 @@ read -sp "Enter password: " passvar
 
 useradd -m -G "wheel" -s /bin/fish $uservar
 echo "$uservar:$passvar" | chpasswd
+
 
 # Edit pacman.conf colours and threads
 sed 's/#Color/Color/' </etc/pacman.conf >/etc/pacman.conf.new
@@ -60,11 +60,9 @@ mv -f /etc/sudoers.new /etc/sudoers
 rm -f /etc/sudoers.new
 
 # Add nobody to wheel, stops passwords for makepkg
-# usermod -a -G wheel nobody 
+usermod -a -G wheel nobody 
 
 # Block comment
-: <<'END'
-END
 
 
 #mkdir "${tmpdir}/paru"
@@ -79,7 +77,8 @@ sudo -u nobody paru -S --noconfirm ${phase2[@]}
 # Dotfiles
 #mkdir /home/$uservar/.config
 git clone https://github.com/kjfarrell/dotfiles.git
-cp -r dotfiles/.config/ /home/$uservar/
+cp -f dotfiles/.config/ /home/$uservar/
+cp -fr dotfiles/bin /home/$uservar/
 chown -R $uservar /home/$uservar/.config/
 chgrp -R $uservar /home/$uservar/.config/
 
