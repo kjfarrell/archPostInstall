@@ -1,8 +1,7 @@
 #!/bin/bash
 
-uservar=kfarrell
-userpass=Farre12l
-
+#: <<'END'
+#END
 
 phase1=(
   "fish" "openssh" "sudo" "base" "base-devel" "wget" "pacman-contrib" "python-pip" "alacritty" "neovim"
@@ -11,7 +10,7 @@ phase1=(
 phase2=(
   "xorg" "xorg-xinit" "gdm" "qtile" "pacman-contrib" "nerd-fonts-ubuntu-mono" 
   "tealdeer" "man" "exa" "ripgrep" "fd" "starship" "neofetch" "google-chrome"
-  "code" "nitrogen" "fq" "pywal" "jq"
+  "code" "nitrogen" "jq" "pywal"
 )
 
 # Run as root
@@ -33,11 +32,9 @@ chmod 777 /.cache
 # Create user
 read -p "Enter Username: " uservar
 read -sp "Enter password: " passvar
-
-
-
 useradd -m -G "wheel" -s /bin/fish $uservar
 echo "$uservar:$passvar" | chpasswd
+
 
 # Edit pacman.conf colours and threads
 sed 's/#Color/Color/' </etc/pacman.conf >/etc/pacman.conf.new
@@ -59,16 +56,7 @@ sed 's/# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' </etc/s
 mv -f /etc/sudoers.new /etc/sudoers
 rm -f /etc/sudoers.new
 
-# Add nobody to wheel, stops passwords for makepkg
-# usermod -a -G wheel nobody 
-
-# Block comment
-: <<'END'
-END
-
-
-#mkdir "${tmpdir}/paru"
-#chmod 777 "{$tmpdir}/paru"
+# Install PARU, this takes a long time.
 sudo -u $uservar git clone https://aur.archlinux.org/paru.git
 cd paru
 sudo -u $uservar makepkg -si --noconfirm
@@ -76,12 +64,16 @@ sudo -u $uservar makepkg -si --noconfirm
 # Install Phase2
 sudo -u $uservar paru -S --noconfirm ${phase2[@]}
 
+
 # Dotfiles
 #mkdir /home/$uservar/.config
+sudo -u ${uservar} mkdir -p /home/${uservar}/bin/styli.sh
 git clone https://github.com/kjfarrell/dotfiles.git
-cp -r dotfiles/.config/ /home/$uservar/
-chown -R $uservar /home/$uservar/.config/
-chgrp -R $uservar /home/$uservar/.config/
+cp -fr dotfiles/.config/ /home/$uservar/
+cp -fr dotfiles/bin /home/$uservar/
+chown -R $uservar /home/$uservar/.config/ /home/$uservar/bin
+chgrp -R $uservar /home/$uservar/.config/ /home/$uservar/bin
+
 
 
 # Wallpaper timer
